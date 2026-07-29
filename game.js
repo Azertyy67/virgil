@@ -1,6 +1,21 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
+// PENGATURAN RESOLUSI DINAMIS (PENYESUAIAN HP & LAYAR)
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas(); // Dijalankan pertama kali saat game dibuka
+
+const WORLD_WIDTH = 2500; 
+const WORLD_HEIGHT = 850;
+const gravity = 0.48;
+
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
 canvas.width = 900; canvas.height = 500;
 const WORLD_WIDTH = 2500; const WORLD_HEIGHT = 850;
 const gravity = 0.48;
