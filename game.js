@@ -1,23 +1,21 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
-// PENGATURAN RESOLUSI DINAMIS (PENYESUAIAN HP & LAYAR)
-function resizeCanvas() {
+// Fungsi untuk menyesuaikan ukuran canvas ke layar miring HP
+function fixMobileScreen() {
+    // Memaksa canvas mengambil ukuran penuh layar
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 }
-window.addEventListener('resize', resizeCanvas);
-resizeCanvas(); // Dijalankan pertama kali saat game dibuka
 
+// Jalankan fungsi saat game dimuat & saat HP diputar/dimiringkan
+window.addEventListener('resize', fixMobileScreen);
+window.addEventListener('orientationchange', fixMobileScreen);
+fixMobileScreen();
+
+// Kode game Anda selanjutnya...
 const WORLD_WIDTH = 2500; 
 const WORLD_HEIGHT = 850;
-const gravity = 0.48;
-
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
-
-canvas.width = 900; canvas.height = 500;
-const WORLD_WIDTH = 2500; const WORLD_HEIGHT = 850;
 const gravity = 0.48;
 
 let gameFrame = 0; let screenShake = 0;
