@@ -1,13 +1,30 @@
-// --- STATE SYSTEM & GAMEPAD SETTINGS ---
+// --- STATE SYSTEM & CONTROL SETTINGS ---
 window.gameState = 'MAIN_MENU';
+window.CONTROL_MODE = 'KEYBOARD'; // Default Control Mode
 
 const menuCanvas = document.getElementById('gameCanvas');
 const mCtx = menuCanvas.getContext('2d');
 
 let menuFrame = 0;
 let menuSelectedOption = 0;
-const menuOptions = ['START MISSION', 'HOW TO PLAY', 'RANKINGS', 'CREDITS'];
 let menuParticles = [];
+
+function getMenuOptions() {
+    return [
+        'START MISSION', 
+        `MODE: [ ${window.CONTROL_MODE} ]`, 
+        'HOW TO PLAY', 
+        'RANKINGS', 
+        'CREDITS'
+    ];
+}
+
+function updateGamepadVisibility() {
+    const gamepadEl = document.getElementById('virtual-gamepad');
+    if (gamepadEl) {
+        gamepadEl.style.display = window.CONTROL_MODE === 'GAMEPAD' ? 'block' : 'none';
+    }
+}
 
 function executeMenuOption() {
     if (menuSelectedOption === 0) {
@@ -16,22 +33,27 @@ function executeMenuOption() {
             window.restartGameInstance();
         }
     } else if (menuSelectedOption === 1) {
-        window.gameState = 'HOW_TO_PLAY';
+        // Toggle Antara Keyboard dan Gamepad
+        window.CONTROL_MODE = window.CONTROL_MODE === 'KEYBOARD' ? 'GAMEPAD' : 'KEYBOARD';
+        updateGamepadVisibility();
     } else if (menuSelectedOption === 2) {
-        window.gameState = 'RANKINGS';
+        window.gameState = 'HOW_TO_PLAY';
     } else if (menuSelectedOption === 3) {
+        window.gameState = 'RANKINGS';
+    } else if (menuSelectedOption === 4) {
         window.gameState = 'CREDITS';
     }
 }
 
-// Control Input Handler
+// Control Input Handler untuk Main Menu
 window.addEventListener('keydown', (e) => {
+    const options = getMenuOptions();
     if (window.gameState === 'MAIN_MENU') {
         if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
-            menuSelectedOption = (menuSelectedOption - 1 + menuOptions.length) % menuOptions.length;
+            menuSelectedOption = (menuSelectedOption - 1 + options.length) % options.length;
         }
         if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') {
-            menuSelectedOption = (menuSelectedOption + 1) % menuOptions.length;
+            menuSelectedOption = (menuSelectedOption + 1) % options.length;
         }
         if (e.key === 'Enter' || e.key === ' ' || e.key === 'z' || e.key === 'Z') {
             executeMenuOption();
@@ -42,6 +64,9 @@ window.addEventListener('keydown', (e) => {
         }
     }
 });
+
+// Inisialisasi Tampilan awal
+updateGamepadVisibility();
 
 // Partikel Latar Menu
 for (let i = 0; i < 30; i++) {
@@ -70,32 +95,38 @@ function drawMenu() {
         mCtx.beginPath(); mCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2); mCtx.fill();
     });
 
+    const options = getMenuOptions();
+
     if (window.gameState === 'MAIN_MENU') {
         mCtx.textAlign = 'center';
         mCtx.fillStyle = '#fff'; mCtx.font = 'bold 48px Impact';
-        mCtx.fillText('Virgil', menuCanvas.width / 2, 115);
+        mCtx.fillText('Virgil', menuCanvas.width / 2, 100);
         
         mCtx.fillStyle = '#00ffff'; mCtx.font = 'bold 16px Impact';
-        mCtx.fillText('DMC Fan Made', menuCanvas.width / 2, 145);
+        mCtx.fillText('DMC fan made', menuCanvas.width / 2, 130);
 
-        for (let i = 0; i < menuOptions.length; i++) {
-            let optY = 240 + i * 42;
+        for (let i = 0; i < options.length; i++) {
+            let optY = 210 + i * 38;
             if (i === menuSelectedOption) {
                 mCtx.fillStyle = '#f1c40f'; 
-                mCtx.font = 'bold 22px Arial';
-                mCtx.fillText(`>  ${menuOptions[i]}  <`, menuCanvas.width / 2, optY);
+                mCtx.font = 'bold 20px Arial';
+                mCtx.fillText(`>  ${options[i]}  <`, menuCanvas.width / 2, optY);
             } else {
-                mCtx.fillStyle = '#7f8c8d'; mCtx.font = 'bold 18px Arial';
-                mCtx.fillText(menuOptions[i], menuCanvas.width / 2, optY);
+                mCtx.fillStyle = '#7f8c8d'; mCtx.font = 'bold 16px Arial';
+                mCtx.fillText(options[i], menuCanvas.width / 2, optY);
             }
         }
     } else if (window.gameState === 'HOW_TO_PLAY') {
         mCtx.textAlign = 'center'; mCtx.fillStyle = '#00d2d3'; mCtx.font = 'bold 24px Arial';
-        mCtx.fillText('HOW TO PLAY', menuCanvas.width / 2, 80);
-        mCtx.fillStyle = '#fff'; mCtx.font = '16px Arial';
-        mCtx.fillText('Gunakan D-Pad [▲/▼] untuk memilih menu & [⚔️] untuk Enter.', menuCanvas.width / 2, 180);
-        mCtx.fillText('Tekan D-Pad [▲] untuk Lompat, [◀/▶] untuk Jalan.', menuCanvas.width / 2, 220);
-        mCtx.fillStyle = '#f1c40f'; mCtx.fillText('Tekan [⚔️] untuk Kembali', menuCanvas.width / 2, 380);
+        mCtx.fillText('KONTROL KEYBOARD & MOUSE', menuCanvas.width / 2, 80);
+        mCtx.fillStyle = '#fff'; mCtx.font = '15px Arial';
+        mCtx.fillText('A / D : Gerak Kiri / Kanan', menuCanvas.width / 2, 140);
+        mCtx.fillText('SPASI : Melompat', menuCanvas.width / 2, 170);
+        mCtx.fillText('KLIK KIRI MOUSE : Menyerang', menuCanvas.width / 2, 200);
+        mCtx.fillText('Q : Ganti Senjata | R : Perisai / Parrying', menuCanvas.width / 2, 230);
+        mCtx.fillText('E : Awakening Mode | 1 - 5 : Skill Special', menuCanvas.width / 2, 260);
+        
+        mCtx.fillStyle = '#f1c40f'; mCtx.fillText('Tekan [ESC / ENTER] untuk Kembali', menuCanvas.width / 2, 380);
     }
 }
 
