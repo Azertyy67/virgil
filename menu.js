@@ -73,10 +73,10 @@ function drawMenu() {
     if (window.gameState === 'MAIN_MENU') {
         mCtx.textAlign = 'center';
         mCtx.fillStyle = '#fff'; mCtx.font = 'bold 48px Impact';
-        mCtx.fillText('NEON TRIGGER', menuCanvas.width / 2, 115);
+        mCtx.fillText('Virgil', menuCanvas.width / 2, 115);
         
         mCtx.fillStyle = '#00ffff'; mCtx.font = 'bold 16px Impact';
-        mCtx.fillText('AWAKENING VERTESA', menuCanvas.width / 2, 145);
+        mCtx.fillText('DMC Fan Made', menuCanvas.width / 2, 145);
 
         for (let i = 0; i < menuOptions.length; i++) {
             let optY = 240 + i * 42;
